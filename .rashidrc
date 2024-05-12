@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Aliases
+alias ll="ls -la"
+alias vi="nvim"
+alias rashrc="nvim ~/.rashidrc"
+
+unalias gl
+function gl {
+    # [[ -z "$1" ]] && echo "empty" || echo "something here"
+    if [[ -z "$1" ]]; then
+        echo "empty"
+        git log
+    elif [[ "$1" =~ "^-[0-9]+$" ]]; then
+        [[ -z "$2" ]] && git log $1| cat || git log $1 $2| cat # bruh
+    elif [[ "$2" =~ "^-[0-9]+$" ]]; then
+        git log $2 $1 | cat
+    else
+        git log $1
+    fi
+}
+export -f gl > /dev/null
+# alias gl="git log" # using above function instead
+
+alias gld="git log --pretty=format:\"%Cgreen%h%Cred%d\\ %Creset%s%C(cyan)\\ [%cn]\" --decorate --numstat -c"
+alias gd="git diff"
+alias gs="git status"
+
+# Absolute path (~)
+function abs {
+    export PROMPT=$'[0;32mrzafar[0m[0;32m@[0m[0;32mapple[0m[1;37m: [0m[0;34m%~[0m[1;37m$[0m '
+}
+function rel {
+    # show 1 parent dir (1d)
+    export PROMPT=$'[0;32mrzafar[0m[0;32m@[0m[0;32mapple[0m[1;37m: [0m[0;34m%1d[0m[1;37m$[0m '
+}
+export -f rel > /dev/null
+export -f abs > /dev/null
+
+# check to see which one is currently active in PROMPT
+string="$(echo $PROMPT)"
+[[ $string =~ "1d" ]] && rel || abs
+
+# ask for confirmation before deleting (macOS only)
+alias rm="rm -i"
+
+# dirs
+alias push="pushd"
+alias pop="popd"
+alias 0="dirs -v"
+alias 1="pushd $1"
+alias 2="pushd $2"
+alias 3="pushd $3"
+alias 4="pushd $4"
+alias 5="pushd $5"
+alias 6="pushd $6"
+alias 7="pushd $7"
+alias 8="pushd $8"
+alias 9="pushd $9"
